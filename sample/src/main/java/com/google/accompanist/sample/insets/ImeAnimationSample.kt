@@ -47,7 +47,6 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
 import com.google.accompanist.sample.AccompanistSampleTheme
 import com.google.accompanist.sample.R
-import com.google.accompanist.sample.randomSampleImageUrl
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalAnimatedInsets::class)
@@ -69,7 +68,7 @@ class ImeAnimationSample : ComponentActivity() {
     }
 }
 
-private val listItems = List(40) { randomSampleImageUrl(it) }
+private val listItems = List(40) { it.toString() }
 
 @OptIn(ExperimentalAnimatedInsets::class)
 @Composable
@@ -97,25 +96,24 @@ private fun Sample() {
                 reverseLayout = true,
                 modifier = Modifier
                     .weight(1f)
-                    .nestedScroll(connection = rememberImeNestedScrollConnection())
             ) {
-                items(listItems) { imageUrl ->
-                    ListItem(imageUrl, Modifier.fillMaxWidth())
+                items(listItems) { index ->
+                    TextInput(index)
                 }
-            }
-
-            Surface(elevation = 1.dp) {
-                val text = remember { mutableStateOf(TextFieldValue()) }
-                OutlinedTextField(
-                    value = text.value,
-                    onValueChange = { text.value = it },
-                    placeholder = { Text(text = "Watch me animate...") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .navigationBarsWithImePadding()
-                )
             }
         }
     }
+}
+
+@Composable
+private fun TextInput(placeholder: String) {
+    val text = remember { mutableStateOf(TextFieldValue()) }
+    OutlinedTextField(
+        value = text.value,
+        onValueChange = { text.value = it },
+        placeholder = { Text(text = placeholder) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    )
 }
